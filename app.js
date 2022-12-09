@@ -1,7 +1,7 @@
 const http = require('http');
 var express = require('express');
 var app = express();
-var fs = require('fs'),
+var fs = require('fs')
 var url = require('url');
 const port = 3000;
 
