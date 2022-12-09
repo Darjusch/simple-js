@@ -1,36 +1,38 @@
-const http = require('http');
 var express = require('express');
 var app = express();
 var fs = require('fs');
-var url = require('url');
+const bp = require('body-parser');
+app.use(bp.json());
+app.use(bp.urlencoded({ extended: true }));
 const port = 3000;
 
-const server = http.createServer((req, res) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
-});
-
-app.post('/write', function (req, res) {
-  fs.writeFile('creds.txt', req.body, { flag: 'a+' }, (err) => {
-    if (err) {
-      console.error(err);
-      res.send(err);
-    }
-  });
-  res.send('Success!');
-});
-app.get('/read', function (req, res) {
+app.get('/', function (req, res) {
   fs.readFile('creds.txt', 'utf-8', (err, data) => {
     if (err) {
       console.error(err);
       res.send(err);
+    } else {
+      console.log('Success!');
+      console.log(data);
+      res.send(data);
     }
-    console.log(data);
-    res.send(data);
   });
 });
 
-server.listen(port, () => {
+app.post('/write', function (req, res) {
+  console.log(JSON.stringify(req.body));
+  var appendData = JSON.stringify(req.body) + '\n';
+  fs.appendFile('creds.txt', appendData, { flag: 'a+' }, (err) => {
+    if (err) {
+      console.error(err);
+      res.send(err);
+    } else {
+      console.log('Success!');
+    }
+  });
+  res.send('Success!');
+});
+
+app.listen(port, () => {
   console.log(`Server running on port: ${port}`);
 });
