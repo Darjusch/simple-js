@@ -31,7 +31,7 @@ app.get('/read', function(req, res) {
 	res.send(data);
 	}
 })
-
+})
 
 server.listen(port, () => {
   console.log(`Server running on port: ${port}`);
